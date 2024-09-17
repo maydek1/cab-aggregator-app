@@ -1,5 +1,5 @@
 databaseChangeLog:
-  - logicalFilePath: db/changelog/db.changelog-passenger.yaml
+  - logicalFilePath: db/changelog/db.changelog-master.yaml
   - changeSet:
       id: 1
       author: maydek
@@ -15,13 +15,13 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: firstName
+                  name: first_name
                   type: varchar(50)
                   constraints:
                     unique: true
                     nullable: false
               - column:
-                  name: secondName
+                  name: second_name
                   type: varchar(512)
                   constraints:
                     nullable: false

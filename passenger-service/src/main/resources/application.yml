@@ -10,7 +10,7 @@ spring:
     resources:
       static-locations: classpath:/static/
   liquibase:
-    change-log: classpath:db/changelog/db.changelog-masterDriver.yaml
+    change-log: classpath:db/changelog/db.changelog-master.yaml
   application:
     name: PassengerService
 server:
