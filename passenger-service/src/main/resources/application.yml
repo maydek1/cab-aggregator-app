@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/passengerDB
+    username: postgres
+    password: 123
+  jpa:
+    hibernate:
+      ddl-auto: none
+  web:
+    resources:
+      static-locations: classpath:/static/
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-masterDriver.yaml
+  application:
+    name: PassengerService
+server:
+  port: 4566

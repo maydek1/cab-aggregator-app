@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - logicalFilePath: db/changelog/db.changelog-passenger.yaml
+  - changeSet:
+      id: 1
+      author: maydek
+      changes:
+        - createTable:
+            tableName: passengers
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: firstName
+                  type: varchar(50)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: secondName
+                  type: varchar(512)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: phone
+                  type: varchar(50)
+              - column:
+                  name: email
+                  type: varchar(50)
