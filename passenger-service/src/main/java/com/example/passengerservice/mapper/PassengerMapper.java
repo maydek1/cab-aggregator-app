@@ -1,5 +1,6 @@
 package com.example.passengerservice.mapper;
 
+import com.example.passengerservice.dto.request.PassengerRequest;
 import com.example.passengerservice.dto.response.PassengerResponse;
 import com.example.passengerservice.model.Passenger;
 import org.mapstruct.Mapper;
@@ -10,5 +11,6 @@ public interface PassengerMapper {
     PassengerMapper INSTANCE = Mappers.getMapper(PassengerMapper.class);
     PassengerResponse passengerToPassengerResponse(Passenger passenger);
 
+    Passenger passengerRequestToPassenger(PassengerRequest passengerRequest);
 
 }
