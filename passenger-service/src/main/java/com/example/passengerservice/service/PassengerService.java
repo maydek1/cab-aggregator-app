@@ -1,11 +1,11 @@
 package com.example.passengerservice.service;
 
 import com.example.passengerservice.dto.request.PassengerRequest;
-import com.example.passengerservice.repositories.PassengerRepository;
+import com.example.passengerservice.dto.response.PassengerResponse;
 
 public interface PassengerService {
-    PassengerRepository getPassengerById(Long id);
-    PassengerRepository deletePassengerById(Long id);
-    PassengerRepository updatePassenger(Long id, PassengerRequest passengerRequest);
-    PassengerRequest createPassenger(PassengerRequest passengerRequest);
+    PassengerResponse getPassengerById(Long id);
+    PassengerResponse deletePassengerById(Long id);
+    PassengerResponse updatePassenger(Long id, PassengerRequest passengerRequest);
+    PassengerResponse createPassenger(PassengerRequest passengerRequest);
 }
