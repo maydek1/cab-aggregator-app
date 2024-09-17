@@ -40,35 +40,40 @@ public class PassengerServiceImpl implements PassengerService {
         Passenger passenger = passengerRepository.findById(id)
                         .orElseThrow(() -> new PassengerNotFoundException(String.format(PASSENGER_NOT_FOUND, id)));
 
-        updateEmailIfChanged(passenger.getEmail(), passengerRequest.getEmail(), () -> passenger.setEmail(passengerRequest.getEmail()));
+        checkEmailToExist(passenger.getEmail(), passengerRequest.getEmail());
+        checkPhoneToExist(passenger.getPhone(), passengerRequest.getPhone());
 
-        updatePhoneIfChanged(passenger.getPhone(), passengerRequest.getPhone(), () -> passenger.setPhone(passengerRequest.getPhone()));
-
-        passenger.setFirstName(passengerRequest.getFirstName());
-        passenger.setSecondName(passengerRequest.getSecondName());
-
-        passengerRepository.save(passenger);
-        return passengerMapper.passengerToPassengerResponse(passenger);
+        Passenger passenger1 = passengerMapper.passengerRequestToPassenger(passengerRequest);
+        passenger1.setId(passenger.getId());
+        return passengerMapper.passengerToPassengerResponse(passengerRepository.save(passenger1));
     }
 
-    private void updateEmailIfChanged(String currentEmail, String newEmail, Runnable updateAction) {
+    private void checkEmailToExist(String currentEmail, String newEmail) {
         if (!Objects.equals(currentEmail, newEmail)) {
-            updateAction.run();
-        } else {
-            throw new EmailAlreadyExistException(String.format(EMAIL_ALREADY_EXIST, newEmail));
+            if (passengerRepository.existsByEmail(newEmail)){
+                throw new EmailAlreadyExistException(String.format(EMAIL_ALREADY_EXIST, newEmail));
+            }
         }
     }
 
-    private void updatePhoneIfChanged(String currentPhone, String newPhone, Runnable updateAction) {
+    private void checkPhoneToExist(String currentPhone, String newPhone) {
         if (!Objects.equals(currentPhone, newPhone)) {
-            updateAction.run();
-        } else {
-            throw new PhoneAlreadyExistException(String.format(PHONE_ALREADY_EXIST, newPhone));
+            if (passengerRepository.existsByPhone(newPhone)){
+                throw new PhoneAlreadyExistException(String.format(PHONE_ALREADY_EXIST, newPhone));
+            }
         }
     }
 
     @Override
     public PassengerResponse createPassenger(PassengerRequest passengerRequest) {
+
+        if (passengerRepository.existsByEmail(passengerRequest.getEmail())) {
+            throw new EmailAlreadyExistException(String.format(EMAIL_ALREADY_EXIST, passengerRequest.getEmail()));
+        }
+        if (passengerRepository.existsByPhone(passengerRequest.getPhone())) {
+            throw new PhoneAlreadyExistException(String.format(PHONE_ALREADY_EXIST, passengerRequest.getPhone()));
+        }
+
         Passenger passenger = passengerMapper.passengerRequestToPassenger(passengerRequest);
         passengerRepository.save(passenger);
         return passengerMapper.passengerToPassengerResponse(passenger);

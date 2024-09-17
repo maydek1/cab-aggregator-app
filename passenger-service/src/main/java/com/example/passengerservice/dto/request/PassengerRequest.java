@@ -8,7 +8,6 @@ import lombok.*;
 @Getter
 @Setter
 public class PassengerRequest {
-    private Long id;
     private String firstName;
     private String secondName;
     private String phone;
