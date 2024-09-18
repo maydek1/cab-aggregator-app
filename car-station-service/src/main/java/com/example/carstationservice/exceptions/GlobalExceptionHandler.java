@@ -1,4 +1,4 @@
-package com.example.driverservice.exceptions;
+package com.example.carstationservice.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,13 +7,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(DriverNotFoundException.class)
-    public ResponseEntity<String> handlerDriverNotFoundException(DriverNotFoundException ex){
+    @ExceptionHandler(CarNotFoundException.class)
+    public ResponseEntity<String> handlerCarNotFoundException(CarNotFoundException ex){
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({EmailAlreadyExistException.class, PhoneAlreadyExistException.class})
-    public ResponseEntity<String> handlerAlreadyExistException(RuntimeException ex){
+    @ExceptionHandler(CarNumberAlreadyExistException.class)
+    public ResponseEntity<String> handlerCarNumberAlreadyExistException(RuntimeException ex){
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
