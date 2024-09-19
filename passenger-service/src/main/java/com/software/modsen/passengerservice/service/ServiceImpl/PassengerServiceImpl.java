@@ -10,6 +10,7 @@ import com.software.modsen.passengerservice.model.Passenger;
 import com.software.modsen.passengerservice.repositories.PassengerRepository;
 import com.software.modsen.passengerservice.service.PassengerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -20,8 +21,14 @@ import static com.software.modsen.passengerservice.util.ExceptionMessages.*;
 @RequiredArgsConstructor
 public class PassengerServiceImpl implements PassengerService {
 
-    private final PassengerRepository passengerRepository;
-    private final PassengerMapper passengerMapper;
+    private PassengerRepository passengerRepository;
+    private PassengerMapper passengerMapper;
+
+    @Autowired
+    public PassengerServiceImpl(PassengerRepository passengerRepository, PassengerMapper passengerMapper){
+        this.passengerMapper = passengerMapper;
+        this.passengerRepository = passengerRepository;
+    }
 
     @Override
     public PassengerResponse getPassengerById(Long id) {

@@ -6,9 +6,8 @@ import com.software.modsen.passengerservice.model.Passenger;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface PassengerMapper {
-    PassengerMapper INSTANCE = Mappers.getMapper(PassengerMapper.class);
     PassengerResponse passengerToPassengerResponse(Passenger passenger);
 
     Passenger passengerRequestToPassenger(PassengerRequest passengerRequest);
