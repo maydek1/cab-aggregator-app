@@ -28,34 +28,30 @@ services:
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
     depends_on:
       - zookeeper
-  postgres:
-    image: postgres
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: keycloakdb
-      POSTGRES_USER: keycloakuser
-      POSTGRES_PASSWORD: keycloakpass
-    networks:
-      - cab-aggregator
-  keycloak:
-    image: quay.io/keycloak/keycloak:16.1.1
-    ports:
-      - "8180:8080"
-    environment:
-      DB_VENDOR: POSTGRES
-      DB_ADDR: postgres
-      DB_DATABASE: keycloakdb
-      DB_SCHEMA: public
-      DB_USER: keycloakuser
-      DB_PASSWORD: keycloakpass
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD: adminpass
-      KEYCLOAK_IMPORT: /keycloak:/opt/keycloak/data/import
-    networks:
-      - cab-aggregator
-    depends_on:
-      - postgres
-    volumes:
-      - ./keycloak:/opt/keycloak/data/import
-
+#  postgres:
+#    image: postgres
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data
+#    environment:
+#      POSTGRES_DB: keycloakdb
+#      POSTGRES_USER: keycloakuser
+#      POSTGRES_PASSWORD: keycloakpass
+#    networks:
+#      - cab-aggregator
+#  keycloak:
+#    image: quay.io/keycloak/keycloak:16.1.1
+#    ports:
+#      - "8180:8080"
+#    environment:
+#      DB_VENDOR: POSTGRES
+#      DB_ADDR: postgres
+#      DB_DATABASE: keycloakdb
+#      DB_SCHEMA: public
+#      DB_USER: keycloakuser
+#      DB_PASSWORD: keycloakpass
+#      KEYCLOAK_USER: admin
+#      KEYCLOAK_PASSWORD: adminpass
+#      KEYCLOAK_IMPORT: /keycloak:/opt/keycloak/data/import
+networks:
+  cab-aggregator:
+    driver: bridge
