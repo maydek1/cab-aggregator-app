@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-@FeignClient(name = "ride-service", url = "http://localhost:4568/ride", configuration = FeignConfig.class)
+@FeignClient(name = "${ride-service.name}", url =  "${ride-service.url}", configuration = FeignConfig.class)
 public interface RideClient {
 
     @GetMapping("/created/{id}")

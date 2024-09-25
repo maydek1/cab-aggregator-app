@@ -9,6 +9,7 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import static com.software.modsen.passengerservice.util.ExceptionMessages.AVAILABLE_DRIVER_NOT_FOUND;
@@ -17,16 +18,18 @@ import static com.software.modsen.passengerservice.util.ExceptionMessages.AVAILA
 @RequiredArgsConstructor
 public class RideService {
 
+    public static final int MESSAGE_TIMEOUT = 5000;
+
+    @Value("${rabbitmq.queues.request}")
+    private String requestQueue;
+
     private final RideClient rideClient;
     private final RabbitTemplate rabbitTemplate;
     private final Queue responseQueue;
 
     public RideResponse startRide(RideRequest rideRequest) {
-        System.out.println(rideRequest);
         RideResponse rideResponse = rideClient.createRide(rideRequest).getBody();
-        System.out.println(rideResponse);
         Long driverId = findAvailableDriver();
-        System.out.println(driverId);
         assert rideResponse != null;
         rideResponse = rideClient.setDriver(new RideDriverRequest(driverId, rideResponse.getId())).getBody();
 
@@ -39,9 +42,9 @@ public class RideService {
         messageProperties.setReplyTo(responseQueue.getName());
         Message message = new Message("".getBytes(), messageProperties);
 
-        rabbitTemplate.convertAndSend("request.queue", message);
+        rabbitTemplate.convertAndSend(requestQueue, message);
 
-        Message responseMessage = rabbitTemplate.receive(responseQueue.getName(), 5000); // Таймаут 5 секунд
+        Message responseMessage = rabbitTemplate.receive(responseQueue.getName(), MESSAGE_TIMEOUT);
         if (responseMessage != null) {
             return Long.valueOf(new String(responseMessage.getBody()));
         } else {

@@ -15,7 +15,7 @@ public class DriverListener {
     private final DriverRepository driverRepository;
     private final RabbitTemplate rabbitTemplate;
 
-    @RabbitListener(queues = "request.queue")
+    @RabbitListener(queues = "${rabbitmq.queues.request}")
     public void processRequest(Message requestMessage) {
         Long driverId = driverRepository.findFirstByAvailableIs(true).getId();
 
@@ -26,7 +26,6 @@ public class DriverListener {
         responseProperties.setCorrelationId(correlationId);
 
         Message responseMessage = new Message(driverId.toString().getBytes(), responseProperties);
-        System.out.println(responseMessage);
         rabbitTemplate.convertAndSend(replyTo, responseMessage);
     }
 }

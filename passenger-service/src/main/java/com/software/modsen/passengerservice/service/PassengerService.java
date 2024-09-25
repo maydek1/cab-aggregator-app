@@ -1,7 +1,6 @@
 package com.software.modsen.passengerservice.service;
 
 import com.software.modsen.passengerservice.dto.request.PassengerRequest;
-import com.software.modsen.passengerservice.dto.response.PassengerResponse;
 import com.software.modsen.passengerservice.exception.EmailAlreadyExistException;
 import com.software.modsen.passengerservice.exception.PassengerNotFoundException;
 import com.software.modsen.passengerservice.exception.PhoneAlreadyExistException;
@@ -9,9 +8,9 @@ import com.software.modsen.passengerservice.mapper.PassengerMapper;
 import com.software.modsen.passengerservice.model.Passenger;
 import com.software.modsen.passengerservice.repositories.PassengerRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 import static com.software.modsen.passengerservice.util.ExceptionMessages.*;
@@ -23,23 +22,17 @@ public class PassengerService{
     private PassengerRepository passengerRepository;
     private PassengerMapper passengerMapper;
 
-    @Autowired
-    public PassengerService(PassengerRepository passengerRepository, PassengerMapper passengerMapper){
-        this.passengerMapper = passengerMapper;
-        this.passengerRepository = passengerRepository;
-    }
-
-    public PassengerResponse getPassengerById(Long id) {
+    public Passenger getPassengerById(Long id) {
         return getOrElseThrow(id);
     }
 
-    public PassengerResponse deletePassengerById(Long id) {
-        PassengerResponse passengerResponse = getOrElseThrow(id);
+    public Passenger deletePassengerById(Long id) {
+        Passenger passenger = getOrElseThrow(id);
         passengerRepository.deleteById(id);
-        return passengerResponse;
+        return passenger;
     }
 
-    public PassengerResponse updatePassenger(Long id, PassengerRequest passengerRequest) {
+    public Passenger updatePassenger(Long id, PassengerRequest passengerRequest) {
         Passenger passenger = passengerRepository.findById(id)
                         .orElseThrow(() -> new PassengerNotFoundException(String.format(PASSENGER_NOT_FOUND, id)));
 
@@ -48,7 +41,7 @@ public class PassengerService{
 
         Passenger passenger1 = passengerMapper.passengerRequestToPassenger(passengerRequest);
         passenger1.setId(passenger.getId());
-        return passengerMapper.passengerToPassengerResponse(passengerRepository.save(passenger1));
+        return passengerRepository.save(passenger1);
     }
 
     private void checkEmailToExist(String currentEmail, String newEmail) {
@@ -67,7 +60,7 @@ public class PassengerService{
         }
     }
 
-    public PassengerResponse createPassenger(PassengerRequest passengerRequest) {
+    public Passenger createPassenger(PassengerRequest passengerRequest) {
 
         if (passengerRepository.existsByEmail(passengerRequest.getEmail())) {
             throw new EmailAlreadyExistException(String.format(EMAIL_ALREADY_EXIST, passengerRequest.getEmail()));
@@ -77,12 +70,15 @@ public class PassengerService{
         }
 
         Passenger passenger = passengerMapper.passengerRequestToPassenger(passengerRequest);
-        passengerRepository.save(passenger);
-        return passengerMapper.passengerToPassengerResponse(passenger);
+        return passengerRepository.save(passenger);
     }
 
-    PassengerResponse getOrElseThrow(Long id){
-        return passengerMapper.passengerToPassengerResponse(passengerRepository.findById(id)
-                .orElseThrow(()-> new PassengerNotFoundException(String.format(PASSENGER_NOT_FOUND, id))));
+    private Passenger getOrElseThrow(Long id){
+        return passengerRepository.findById(id)
+                .orElseThrow(()-> new PassengerNotFoundException(String.format(PASSENGER_NOT_FOUND, id)));
+    }
+
+    public List<Passenger> getAllPassenger(){
+        return passengerRepository.findAll();
     }
 }

@@ -2,8 +2,6 @@ package com.software.modsen.driverservice.service;
 
 import com.software.modsen.driverservice.dto.request.DriverRatingRequest;
 import com.software.modsen.driverservice.dto.request.DriverRequest;
-import com.software.modsen.driverservice.dto.response.DriverResponse;
-import com.software.modsen.driverservice.dto.response.DriverSetResponse;
 import com.software.modsen.driverservice.exceptions.DriverNotFoundException;
 import com.software.modsen.driverservice.exceptions.EmailAlreadyExistException;
 import com.software.modsen.driverservice.exceptions.PhoneAlreadyExistException;
@@ -13,9 +11,8 @@ import com.software.modsen.driverservice.repository.DriverRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static com.software.modsen.driverservice.util.ExceptionMessages.*;
 
@@ -26,17 +23,17 @@ public class DriverService {
     private final DriverRepository driverRepository;
     private final DriverMapper driverMapper;
 
-    public DriverResponse getDriverById(Long id) {
+    public Driver getDriverById(Long id) {
         return getOrElseThrow(id);
     }
 
-    public DriverResponse deleteDriverById(Long id) {
-        DriverResponse driverResponse = getOrElseThrow(id);
+    public Driver deleteDriverById(Long id) {
+        Driver driver = getOrElseThrow(id);
         driverRepository.deleteById(id);
-        return driverResponse;
+        return driver;
     }
 
-    public DriverResponse updateDriver(Long id, DriverRequest driverRequest) {
+    public Driver updateDriver(Long id, DriverRequest driverRequest) {
         Driver driver = driverRepository.findById(id)
                 .orElseThrow(() -> new DriverNotFoundException(String.format(DRIVER_NOT_FOUND, id)));
 
@@ -45,7 +42,7 @@ public class DriverService {
 
         Driver driver1 = driverMapper.driverRequestToDriver(driverRequest);
         driver1.setId(driver.getId());
-        return driverMapper.driverToDriverResponse(driverRepository.save(driver1));
+        return driverRepository.save(driver1);
     }
 
     private void checkEmailToExist(String currentEmail, String newEmail) {
@@ -64,7 +61,7 @@ public class DriverService {
         }
     }
 
-    public DriverResponse createDriver(DriverRequest driverRequest) {
+    public Driver createDriver(DriverRequest driverRequest) {
 
         if (driverRepository.existsByEmail(driverRequest.getEmail())) {
             throw new EmailAlreadyExistException(String.format(EMAIL_ALREADY_EXIST, driverRequest.getEmail()));
@@ -74,25 +71,20 @@ public class DriverService {
         }
         Driver driver = driverMapper.driverRequestToDriver(driverRequest);
         driver.setAvailable(true);
-        driverRepository.save(driver);
-        return driverMapper.driverToDriverResponse(driver);
+        return driverRepository.save(driver);
     }
 
-    private DriverResponse getOrElseThrow(Long id){
-        return driverMapper.driverToDriverResponse(driverRepository.findById(id)
-                .orElseThrow(()-> new DriverNotFoundException(String.format(DRIVER_NOT_FOUND, id))));
+    private Driver getOrElseThrow(Long id){
+        return driverRepository.findById(id)
+                .orElseThrow(()-> new DriverNotFoundException(String.format(DRIVER_NOT_FOUND, id)));
     }
 
-    public DriverSetResponse getAllDrivers(){
-        Set<DriverResponse> drivers = driverRepository.findAll()
-                .stream()
-                .map(driverMapper::driverToDriverResponse)
-                .collect(Collectors.toSet());
-        return new DriverSetResponse(drivers);
+    public List<Driver> getAllDrivers(){
+        return driverRepository.findAll();
     }
 
-    public DriverResponse getFreeDriver() {
-        return driverMapper.driverToDriverResponse(driverRepository.findFirstByAvailableIs(true));
+    public Driver getFreeDriver() {
+        return driverRepository.findFirstByAvailableIs(true);
     }
 
     public void toggleAvailable(Long id, boolean available){
@@ -102,15 +94,15 @@ public class DriverService {
         driverRepository.save(driver);
     }
 
-    public DriverResponse updateRating(DriverRatingRequest driverRatingRequest) {
+    public Driver updateRating(DriverRatingRequest driverRatingRequest) {
         Driver driver = driverRepository.findById(driverRatingRequest.getDriverId())
                 .orElseThrow(() -> new DriverNotFoundException(String.format(DRIVER_NOT_FOUND,
                         driverRatingRequest.getDriverId())));
         driver.setRate(setRating(driver.getRatingCount(), driverRatingRequest.getRate(), driver.getRate()));
-        return driverMapper.driverToDriverResponse(driverRepository.save(driver));
+        return driverRepository.save(driver);
     }
 
-    public int setRating(int ratingCount, int rate, int oldRate){
+    public double setRating(int ratingCount, double rate, double oldRate){
         return (rate + oldRate) / (ratingCount+1);
     }
 }

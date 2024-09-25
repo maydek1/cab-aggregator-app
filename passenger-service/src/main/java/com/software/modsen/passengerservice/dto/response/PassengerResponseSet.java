@@ -1,16 +1,16 @@
-package com.software.modsen.driverservice.dto.request;
+package com.software.modsen.passengerservice.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class DriverRatingRequest {
-    private Long rideId;
-    private double rate;
-    private Long driverId;
+public class PassengerResponseSet {
+    private Set<PassengerResponse> passengers;
 }

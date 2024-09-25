@@ -21,6 +21,6 @@ public class Driver {
     private String sex;
     private Long car_id;
     private boolean available;
-    private int rate;
+    private double rate;
     private int ratingCount;
 }

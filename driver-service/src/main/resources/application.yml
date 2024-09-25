@@ -28,4 +28,11 @@ spring:
 server:
   port: 4567
 
+ride-service:
+  name: ride-service
+  url: http://localhost:4568/ride
 
+rabbitmq:
+  queues:
+    request: request.queue
+    response: response.queue

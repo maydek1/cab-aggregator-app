@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "ride-service", url = "http://localhost:4568/ride", configuration = FeignConfig.class)
+@FeignClient(name = "${ride-service.name}", url = "${ride-service.url}", configuration = FeignConfig.class)
 public interface RideClient {
 
-    @PatchMapping("/status/")
+    @PatchMapping("/status")
     ResponseEntity<RideResponse> changeStatus(@RequestBody RideStatusRequest rideStatusRequest);
 
-    @PostMapping()
+    @PostMapping
     ResponseEntity<RideResponse> createRide(@RequestBody RideRequest rideRequest);
 
     @PutMapping("/driver")

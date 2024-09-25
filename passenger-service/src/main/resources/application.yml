@@ -20,3 +20,15 @@ spring:
     password: password
 server:
   port: 4566
+
+rating-service:
+  name: rating-service
+  url: http://localhost:4569/ratings
+ride-service:
+  name: ride-service
+  url: http://localhost:4568/ride
+
+rabbitmq:
+  queues:
+    request: request.queue
+    response: response.queue

@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "rating-service", url = "http://localhost:4569/ratings", configuration = FeignConfig.class)
+@FeignClient(name = "${rating-service.name}", url = "${rating-service.url}", configuration = FeignConfig.class)
 public interface RatingClient {
     @PostMapping
     ResponseEntity<RatingResponse> createRating(@RequestBody RatingRequest ratingRequest);

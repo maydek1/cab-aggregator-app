@@ -37,7 +37,7 @@ databaseChangeLog:
                   defaultValue: 'true'
               - column:
                   name: rate
-                  type: INT
+                  type: DOUBLE
                   defaultValueNumeric: "0"
               - column:
                   name: rating_count
