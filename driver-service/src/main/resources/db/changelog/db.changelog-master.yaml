@@ -31,3 +31,15 @@ databaseChangeLog:
               - column:
                   name: car_id
                   type: BIGINT
+              - column:
+                  name: available
+                  type: BOOLEAN
+                  defaultValue: 'true'
+              - column:
+                  name: rate
+                  type: INT
+                  defaultValueNumeric: "0"
+              - column:
+                  name: rating_count
+                  defaultValueNumeric: "0"
+                  type: INT

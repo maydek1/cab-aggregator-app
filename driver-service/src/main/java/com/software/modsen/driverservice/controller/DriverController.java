@@ -1,20 +1,22 @@
 package com.software.modsen.driverservice.controller;
 
+import com.software.modsen.driverservice.dto.request.DriverRatingRequest;
 import com.software.modsen.driverservice.dto.request.DriverRequest;
-import com.software.modsen.driverservice.dto.response.DriverResponse;
-import com.software.modsen.driverservice.dto.response.DriverSetResponse;
+import com.software.modsen.driverservice.dto.response.*;
 import com.software.modsen.driverservice.service.DriverService;
+import com.software.modsen.driverservice.service.RideService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/drivers")
+@RequestMapping("/api/v1/drivers")
 @RequiredArgsConstructor
 public class DriverController {
 
     private final DriverService driverService;
+    private final RideService rideService;
 
     @GetMapping("/{id}")
     public ResponseEntity<DriverResponse> getDriverById(@PathVariable Long id) {
@@ -40,5 +42,36 @@ public class DriverController {
     @GetMapping
     public ResponseEntity<DriverSetResponse> getAllDrivers() {
         return ResponseEntity.ok(driverService.getAllDrivers());
+    }
+
+    @GetMapping("/free")
+    public ResponseEntity<DriverResponse> getFreeDriver() {
+        return ResponseEntity.ok(driverService.getFreeDriver());
+    }
+
+    @GetMapping("/confirm/{id}")
+    public ResponseEntity<RideResponseSet> getRideToConfirm(@PathVariable Long id){
+        return ResponseEntity.ok(rideService.getRideToConfirm(id));
+    }
+
+    @PostMapping("/accept/{id}")
+    ResponseEntity<RideResponse> acceptRide(@PathVariable Long id){
+        return ResponseEntity.ok(rideService.acceptRide(id));
+    }
+
+    @PostMapping("/reject/{id}")
+    ResponseEntity<RideResponse> rejectRide(@PathVariable Long id){
+        return ResponseEntity.ok(rideService.rejectRide(id));
+
+    }
+
+    @PostMapping("/completed/{id}")
+    ResponseEntity<RideResponse> completedRide(@PathVariable Long id){
+        return ResponseEntity.ok(rideService.completedRide(id));
+    }
+
+    @PostMapping("/driver/rating")
+    ResponseEntity<DriverResponse> updateRating(@RequestBody DriverRatingRequest driverRatingRequest){
+        return ResponseEntity.ok(driverService.updateRating(driverRatingRequest));
     }
 }
