@@ -1,4 +1,4 @@
-package com.software.modsen.driverservice.dto.response;
+package com.software.modsen.passengerservice.dto.response;
 
 import lombok.*;
 
@@ -9,8 +9,8 @@ import lombok.*;
 @Builder
 public class DriverResponse {
     private Long id;
-    private String firstName;
-    private String secondName;
+    private String first_name;
+    private String second_name;
     private String phone;
     private String email;
     private String sex;

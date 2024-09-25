@@ -13,5 +13,22 @@ spring:
     change-log: classpath:db/changelog/db.changelog-master.yaml
   application:
     name: PassengerService
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: user
+    password: password
 server:
   port: 4566
+
+rating-service:
+  name: rating-service
+  url: http://localhost:4569/ratings
+ride-service:
+  name: ride-service
+  url: http://localhost:4568/ride
+
+rabbitmq:
+  queues:
+    request: request.queue
+    response: response.queue

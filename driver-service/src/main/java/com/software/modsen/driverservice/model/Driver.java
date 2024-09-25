@@ -1,6 +1,5 @@
 package com.software.modsen.driverservice.model;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,6 +9,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Driver {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,4 +20,7 @@ public class Driver {
     private String email;
     private String sex;
     private Long car_id;
+    private boolean available;
+    private double rate;
+    private int ratingCount;
 }

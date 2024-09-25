@@ -10,5 +10,29 @@ spring:
     change-log: classpath:db/changelog/db.changelog-master.yaml
   application:
     name: DriverService
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: bus-creation-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: user
+    password: password
 server:
   port: 4567
+
+ride-service:
+  name: ride-service
+  url: http://localhost:4568/ride
+
+rabbitmq:
+  queues:
+    request: request.queue
+    response: response.queue
