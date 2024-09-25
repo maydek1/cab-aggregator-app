@@ -1,19 +1,23 @@
 package com.software.modsen.passengerservice.controller;
 
 import com.software.modsen.passengerservice.dto.request.PassengerRequest;
+import com.software.modsen.passengerservice.dto.request.RideRequest;
 import com.software.modsen.passengerservice.dto.response.PassengerResponse;
+import com.software.modsen.passengerservice.dto.response.RideResponse;
 import com.software.modsen.passengerservice.service.PassengerService;
+import com.software.modsen.passengerservice.service.RideService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/passengers")
+@RequestMapping("/api/v1/passengers")
 @RequiredArgsConstructor
 public class PassengerController {
 
     private final PassengerService passengerService;
+    private final RideService rideService;
 
     @GetMapping("/{id}")
     public ResponseEntity<PassengerResponse> getPassengerById(@PathVariable Long id) {
@@ -36,8 +40,12 @@ public class PassengerController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePassengerById(@PathVariable Long id) {
-        passengerService.deletePassengerById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<PassengerResponse> deletePassengerById(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(passengerService.deletePassengerById(id));
+    }
+
+    @PostMapping("/ride")
+    public ResponseEntity<RideResponse> startRide(@RequestBody RideRequest rideRequest){
+        return ResponseEntity.ok().body(rideService.startRide(rideRequest));
     }
 }

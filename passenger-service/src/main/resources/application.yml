@@ -13,5 +13,10 @@ spring:
     change-log: classpath:db/changelog/db.changelog-master.yaml
   application:
     name: PassengerService
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: user
+    password: password
 server:
   port: 4566
