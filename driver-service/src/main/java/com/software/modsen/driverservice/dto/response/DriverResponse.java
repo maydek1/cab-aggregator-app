@@ -17,4 +17,5 @@ public class DriverResponse {
     private Long car_id;
     private int rate;
     private int ratingCount;
+    private boolean available;
 }

@@ -2,6 +2,8 @@ package com.software.modsen.passengerservice.dto.response;
 
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,4 +15,5 @@ public class PassengerResponse {
     private String secondName;
     private String phone;
     private String email;
+    private BigDecimal money;
 }

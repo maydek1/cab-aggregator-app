@@ -1,5 +1,6 @@
 package com.software.modsen.driverservice.service;
 
+import com.software.modsen.driverservice.model.Driver;
 import com.software.modsen.driverservice.repository.DriverRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.Message;
@@ -17,15 +18,17 @@ public class DriverListener {
 
     @RabbitListener(queues = "${rabbitmq.queues.request}")
     public void processRequest(Message requestMessage) {
-        Long driverId = driverRepository.findFirstByAvailableIs(true).getId();
+        Driver driver = driverRepository.findFirstByAvailableIs(true);
 
-        String replyTo = requestMessage.getMessageProperties().getReplyTo();
-        String correlationId = requestMessage.getMessageProperties().getCorrelationId();
+        if (driver != null) {
+            String replyTo = requestMessage.getMessageProperties().getReplyTo();
+            String correlationId = requestMessage.getMessageProperties().getCorrelationId();
 
-        MessageProperties responseProperties = new MessageProperties();
-        responseProperties.setCorrelationId(correlationId);
+            MessageProperties responseProperties = new MessageProperties();
+            responseProperties.setCorrelationId(correlationId);
 
-        Message responseMessage = new Message(driverId.toString().getBytes(), responseProperties);
-        rabbitTemplate.convertAndSend(replyTo, responseMessage);
+            Message responseMessage = new Message(driver.getId().toString().getBytes(), responseProperties);
+            rabbitTemplate.convertAndSend(replyTo, responseMessage);
+        }
     }
 }

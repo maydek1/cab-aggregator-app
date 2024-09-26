@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "passengers")
 @Builder
@@ -20,5 +22,5 @@ public class Passenger {
     private String secondName;
     private String phone;
     private String email;
-
+    private BigDecimal money;
 }
