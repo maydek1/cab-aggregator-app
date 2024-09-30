@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ChangeMoneyRequest {
+public class ChargeMoneyRequest {
     private BigDecimal money;
     private Long passengerId;
 }

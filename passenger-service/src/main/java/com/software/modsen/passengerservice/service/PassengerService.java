@@ -1,6 +1,6 @@
 package com.software.modsen.passengerservice.service;
 
-import com.software.modsen.passengerservice.dto.request.ChangeMoneyRequest;
+import com.software.modsen.passengerservice.dto.request.ChargeMoneyRequest;
 import com.software.modsen.passengerservice.dto.request.PassengerRequest;
 import com.software.modsen.passengerservice.exception.EmailAlreadyExistException;
 import com.software.modsen.passengerservice.exception.PassengerNotFoundException;
@@ -83,11 +83,11 @@ public class PassengerService {
         return passengerRepository.findAll();
     }
 
-    public Passenger changeMoney(ChangeMoneyRequest changeMoneyRequest) {
-        Passenger passenger = passengerRepository.findById(changeMoneyRequest.getPassengerId())
-                .orElseThrow(() -> new PassengerNotFoundException(String.format(PASSENGER_NOT_FOUND, changeMoneyRequest.getPassengerId())));
+    public Passenger chargeMoney(ChargeMoneyRequest chargeMoneyRequest) {
+        Passenger passenger = passengerRepository.findById(chargeMoneyRequest.getPassengerId())
+                .orElseThrow(() -> new PassengerNotFoundException(String.format(PASSENGER_NOT_FOUND, chargeMoneyRequest.getPassengerId())));
 
-        passenger.setMoney(passenger.getMoney().add(changeMoneyRequest.getMoney()));
+        passenger.setMoney(passenger.getMoney().add(chargeMoneyRequest.getMoney()));
         return passengerRepository.save(passenger);
     }
 }

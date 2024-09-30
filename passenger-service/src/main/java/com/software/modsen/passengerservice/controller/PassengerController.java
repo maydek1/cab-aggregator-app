@@ -1,6 +1,6 @@
 package com.software.modsen.passengerservice.controller;
 
-import com.software.modsen.passengerservice.dto.request.ChangeMoneyRequest;
+import com.software.modsen.passengerservice.dto.request.ChargeMoneyRequest;
 import com.software.modsen.passengerservice.dto.request.PassengerRequest;
 import com.software.modsen.passengerservice.dto.response.PassengerResponse;
 import com.software.modsen.passengerservice.dto.response.PassengerResponseSet;
@@ -57,8 +57,8 @@ public class PassengerController {
     }
 
     @PostMapping("/money")
-    public ResponseEntity<PassengerResponse> changeMoney(@RequestBody ChangeMoneyRequest changeMoneyRequest){
-        return ResponseEntity.ok(passengerMapper.passengerToPassengerResponse(passengerService.changeMoney(changeMoneyRequest)));
+    public ResponseEntity<PassengerResponse> chargeMoney(@RequestBody ChargeMoneyRequest chargeMoneyRequest){
+        return ResponseEntity.ok(passengerMapper.passengerToPassengerResponse(passengerService.chargeMoney(chargeMoneyRequest)));
     }
 
 }
