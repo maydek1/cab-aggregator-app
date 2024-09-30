@@ -1,5 +1,6 @@
 package com.software.modsen.passengerservice.service;
 
+import com.software.modsen.passengerservice.dto.request.ChargeMoneyRequest;
 import com.software.modsen.passengerservice.dto.request.PassengerRequest;
 import com.software.modsen.passengerservice.exception.EmailAlreadyExistException;
 import com.software.modsen.passengerservice.exception.PassengerNotFoundException;
@@ -17,10 +18,10 @@ import static com.software.modsen.passengerservice.util.ExceptionMessages.*;
 
 @Service
 @RequiredArgsConstructor
-public class PassengerService{
+public class PassengerService {
 
-    private PassengerRepository passengerRepository;
-    private PassengerMapper passengerMapper;
+    private final PassengerRepository passengerRepository;
+    private final PassengerMapper passengerMapper;
 
     public Passenger getPassengerById(Long id) {
         return getOrElseThrow(id);
@@ -34,7 +35,7 @@ public class PassengerService{
 
     public Passenger updatePassenger(Long id, PassengerRequest passengerRequest) {
         Passenger passenger = passengerRepository.findById(id)
-                        .orElseThrow(() -> new PassengerNotFoundException(String.format(PASSENGER_NOT_FOUND, id)));
+                .orElseThrow(() -> new PassengerNotFoundException(String.format(PASSENGER_NOT_FOUND, id)));
 
         checkEmailToExist(passenger.getEmail(), passengerRequest.getEmail());
         checkPhoneToExist(passenger.getPhone(), passengerRequest.getPhone());
@@ -46,7 +47,7 @@ public class PassengerService{
 
     private void checkEmailToExist(String currentEmail, String newEmail) {
         if (!Objects.equals(currentEmail, newEmail)) {
-            if (passengerRepository.existsByEmail(newEmail)){
+            if (passengerRepository.existsByEmail(newEmail)) {
                 throw new EmailAlreadyExistException(String.format(EMAIL_ALREADY_EXIST, newEmail));
             }
         }
@@ -54,7 +55,7 @@ public class PassengerService{
 
     private void checkPhoneToExist(String currentPhone, String newPhone) {
         if (!Objects.equals(currentPhone, newPhone)) {
-            if (passengerRepository.existsByPhone(newPhone)){
+            if (passengerRepository.existsByPhone(newPhone)) {
                 throw new PhoneAlreadyExistException(String.format(PHONE_ALREADY_EXIST, newPhone));
             }
         }
@@ -73,12 +74,20 @@ public class PassengerService{
         return passengerRepository.save(passenger);
     }
 
-    private Passenger getOrElseThrow(Long id){
+    private Passenger getOrElseThrow(Long id) {
         return passengerRepository.findById(id)
-                .orElseThrow(()-> new PassengerNotFoundException(String.format(PASSENGER_NOT_FOUND, id)));
+                .orElseThrow(() -> new PassengerNotFoundException(String.format(PASSENGER_NOT_FOUND, id)));
     }
 
-    public List<Passenger> getAllPassenger(){
+    public List<Passenger> getAllPassenger() {
         return passengerRepository.findAll();
+    }
+
+    public Passenger chargeMoney(ChargeMoneyRequest chargeMoneyRequest) {
+        Passenger passenger = passengerRepository.findById(chargeMoneyRequest.getPassengerId())
+                .orElseThrow(() -> new PassengerNotFoundException(String.format(PASSENGER_NOT_FOUND, chargeMoneyRequest.getPassengerId())));
+
+        passenger.setMoney(passenger.getMoney().add(chargeMoneyRequest.getMoney()));
+        return passengerRepository.save(passenger);
     }
 }

@@ -83,15 +83,15 @@ public class DriverService {
         return driverRepository.findAll();
     }
 
-    public Driver getFreeDriver() {
+    public Driver getAvailableDriver() {
         return driverRepository.findFirstByAvailableIs(true);
     }
 
-    public void toggleAvailable(Long id, boolean available){
+    public Driver toggleAvailable(Long id, boolean available){
         Driver driver = driverRepository.findById(id)
                 .orElseThrow(() -> new DriverNotFoundException(String.format(DRIVER_NOT_FOUND, id)));
         driver.setAvailable(available);
-        driverRepository.save(driver);
+        return driverRepository.save(driver);
     }
 
     public Driver updateRating(DriverRatingRequest driverRatingRequest) {
@@ -99,10 +99,13 @@ public class DriverService {
                 .orElseThrow(() -> new DriverNotFoundException(String.format(DRIVER_NOT_FOUND,
                         driverRatingRequest.getDriverId())));
         driver.setRate(setRating(driver.getRatingCount(), driverRatingRequest.getRate(), driver.getRate()));
+        driver.setRatingCount(driver.getRatingCount()+1);
         return driverRepository.save(driver);
     }
 
     public double setRating(int ratingCount, double rate, double oldRate){
-        return (rate + oldRate) / (ratingCount+1);
+        rate = (rate + oldRate) / (ratingCount+1);
+        if (rate > 5) return 5;
+        return rate;
     }
 }

@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(PassengerNotFoundException.class)
-    public ResponseEntity<String> handlerPassengerNotFoundException(PassengerNotFoundException ex){
+    public ResponseEntity<String> handlerPassengerNotFoundException(PassengerNotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler({EmailAlreadyExistException.class, PhoneAlreadyExistException.class})
-    public ResponseEntity<String> handlerAlreadyExistException(RuntimeException ex){
+    public ResponseEntity<String> handlerAlreadyExistException(RuntimeException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 

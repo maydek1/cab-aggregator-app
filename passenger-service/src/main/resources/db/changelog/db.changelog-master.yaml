@@ -31,3 +31,7 @@ databaseChangeLog:
               - column:
                   name: email
                   type: varchar(50)
+              - column:
+                  name: money
+                  type: DECIMAL(10, 2)
+                  defaultValueNumeric: "0"

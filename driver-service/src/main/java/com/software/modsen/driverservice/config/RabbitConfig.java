@@ -12,8 +12,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitConfig {
 
-    private static final long REPLY_TIMEOUT = 5000;
-
     @Value("${rabbitmq.queues.request}")
     private String requestQueue;
 
@@ -32,8 +30,6 @@ public class RabbitConfig {
 
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
-        RabbitTemplate template = new RabbitTemplate(connectionFactory);
-        template.setReplyTimeout(REPLY_TIMEOUT);
-        return template;
+        return new RabbitTemplate(connectionFactory);
     }
 }
