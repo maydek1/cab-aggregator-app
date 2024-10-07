@@ -1,7 +1,9 @@
 package com.software.modsen.driverservice.service;
 
+import com.software.modsen.driverservice.client.CarClient;
 import com.software.modsen.driverservice.dto.request.DriverRatingRequest;
 import com.software.modsen.driverservice.dto.request.DriverRequest;
+import com.software.modsen.driverservice.exceptions.CarNotFoundException;
 import com.software.modsen.driverservice.exceptions.DriverNotFoundException;
 import com.software.modsen.driverservice.exceptions.EmailAlreadyExistException;
 import com.software.modsen.driverservice.exceptions.PhoneAlreadyExistException;
@@ -22,6 +24,7 @@ public class DriverService {
 
     private final DriverRepository driverRepository;
     private final DriverMapper driverMapper;
+    private final CarClient carClient;
 
     public Driver getDriverById(Long id) {
         return getOrElseThrow(id);
@@ -62,6 +65,8 @@ public class DriverService {
     }
 
     public Driver createDriver(DriverRequest driverRequest) {
+        if (driverRequest.getCarId() != null)
+            if (carClient.getCarById(driverRequest.getCarId()) == null) throw new CarNotFoundException(String.format(CAR_NOT_FOUND, driverRequest.getCarId()));
 
         if (driverRepository.existsByEmail(driverRequest.getEmail())) {
             throw new EmailAlreadyExistException(String.format(EMAIL_ALREADY_EXIST, driverRequest.getEmail()));
@@ -84,7 +89,7 @@ public class DriverService {
     }
 
     public Driver getAvailableDriver() {
-        return driverRepository.findFirstByAvailableIs(true);
+        return driverRepository.findFirstByAvailableAndCarIdNotNull(true);
     }
 
     public Driver toggleAvailable(Long id, boolean available){

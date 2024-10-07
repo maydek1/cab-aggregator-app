@@ -18,7 +18,7 @@ public class DriverListener {
 
     @RabbitListener(queues = "${rabbitmq.queues.request}")
     public void processRequest(Message requestMessage) {
-        Driver driver = driverRepository.findFirstByAvailableIs(true);
+        Driver driver = driverRepository.findFirstByAvailableAndCarIdNotNull(true);
 
         if (driver != null) {
             String replyTo = requestMessage.getMessageProperties().getReplyTo();

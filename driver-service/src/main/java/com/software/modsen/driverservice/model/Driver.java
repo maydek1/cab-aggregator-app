@@ -19,7 +19,7 @@ public class Driver {
     private String phone;
     private String email;
     private String sex;
-    private Long car_id;
+    private Long carId;
     private boolean available;
     private double rate;
     private int ratingCount;

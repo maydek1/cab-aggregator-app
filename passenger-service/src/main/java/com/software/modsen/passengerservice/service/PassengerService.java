@@ -11,6 +11,7 @@ import com.software.modsen.passengerservice.repositories.PassengerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
@@ -62,6 +63,8 @@ public class PassengerService {
     }
 
     public Passenger createPassenger(PassengerRequest passengerRequest) {
+
+        if(passengerRequest.getMoney() == null) passengerRequest.setMoney(BigDecimal.valueOf(0));
 
         if (passengerRepository.existsByEmail(passengerRequest.getEmail())) {
             throw new EmailAlreadyExistException(String.format(EMAIL_ALREADY_EXIST, passengerRequest.getEmail()));

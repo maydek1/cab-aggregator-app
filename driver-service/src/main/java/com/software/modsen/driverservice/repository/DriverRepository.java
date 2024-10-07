@@ -9,5 +9,5 @@ public interface DriverRepository extends JpaRepository<Driver, Long> {
     boolean existsByEmail(String email);
     boolean existsByPhone(String phone);
 
-    Driver findFirstByAvailableIs(boolean available);
+    Driver findFirstByAvailableAndCarIdNotNull(boolean available);
 }
