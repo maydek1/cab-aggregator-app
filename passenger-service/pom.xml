@@ -23,6 +23,7 @@
         <mapstruct.version>1.5.2.Final</mapstruct.version>
         <postgresql.version>42.7.4</postgresql.version>
         <liquibase.version>4.29.2</liquibase.version>
+        <spring.doc.version>2.6.0</spring.doc.version>
     </properties>
 
     <dependencies>
@@ -98,6 +99,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${spring.doc.version}</version>
         </dependency>
     </dependencies>
 
