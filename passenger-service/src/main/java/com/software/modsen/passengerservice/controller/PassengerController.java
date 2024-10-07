@@ -74,8 +74,8 @@ public class PassengerController {
     @ApiResponse(responseCode = "404", description = "Пассажир не найден")
     @DeleteMapping("/{id}")
     public ResponseEntity<PassengerResponse> deletePassengerById(@PathVariable Long id) {
-        passengerService.deletePassengerById(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        PassengerResponse passengerResponse = passengerMapper.passengerToPassengerResponse(passengerService.deletePassengerById(id));
+        return ResponseEntity.ok(passengerResponse);
     }
 
     @Operation(summary = "Пополнить счёт пассажира")

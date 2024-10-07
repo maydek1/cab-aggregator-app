@@ -38,3 +38,8 @@ management:
   endpoint:
     prometheus:
       enabled: true
+
+service:
+  car-service:
+    name: CarStationService
+    path: /api/v1/cars

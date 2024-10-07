@@ -14,5 +14,5 @@ public class DriverRequest {
     private String phone;
     private String email;
     private String sex;
-    private Long car_id;
+    private Long carId;
 }

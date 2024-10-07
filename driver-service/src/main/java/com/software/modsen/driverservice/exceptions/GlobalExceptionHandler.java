@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(DriverNotFoundException.class)
+    @ExceptionHandler({DriverNotFoundException.class, CarNotFoundException.class})
     public ResponseEntity<String> handlerDriverNotFoundException(DriverNotFoundException ex){
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
