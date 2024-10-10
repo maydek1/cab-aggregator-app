@@ -109,7 +109,7 @@ public class DriverService {
     }
 
     public double setRating(int ratingCount, double rate, double oldRate){
-        rate = (rate + oldRate) / (ratingCount+1);
+        rate = (oldRate * ratingCount + rate) / (ratingCount + 1);
         if (rate > 5) return 5;
         return rate;
     }

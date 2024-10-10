@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/v1/passenger")
+@RequestMapping("/api/v1/passengers")
 @RequiredArgsConstructor
 public class PassengerController {
 
@@ -75,7 +75,7 @@ public class PassengerController {
     @DeleteMapping("/{id}")
     public ResponseEntity<PassengerResponse> deletePassengerById(@PathVariable Long id) {
         PassengerResponse passengerResponse = passengerMapper.passengerToPassengerResponse(passengerService.deletePassengerById(id));
-        return ResponseEntity.ok(passengerResponse);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(passengerResponse);
     }
 
     @Operation(summary = "Пополнить счёт пассажира")

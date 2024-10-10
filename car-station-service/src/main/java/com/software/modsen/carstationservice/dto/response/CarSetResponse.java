@@ -10,5 +10,5 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CarSetResponse {
-    private Set<CarResponse> carResponseList;
+    private Set<CarResponse> cars;
 }
