@@ -37,10 +37,8 @@ public class PassengerService {
     public Passenger updatePassenger(Long id, PassengerRequest passengerRequest) {
         Passenger passenger = passengerRepository.findById(id)
                 .orElseThrow(() -> new PassengerNotFoundException(String.format(PASSENGER_NOT_FOUND, id)));
-
         checkEmailToExist(passenger.getEmail(), passengerRequest.getEmail());
         checkPhoneToExist(passenger.getPhone(), passengerRequest.getPhone());
-
         Passenger passenger1 = passengerMapper.passengerRequestToPassenger(passengerRequest);
         passenger1.setId(passenger.getId());
         return passengerRepository.save(passenger1);
