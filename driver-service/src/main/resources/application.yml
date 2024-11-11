@@ -15,6 +15,12 @@ spring:
     port: 5672
     username: user
     password: password
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://keycloak:8080/realms/cab-realm
+          jwk-set-uri: http://keycloak:8080/realms/cab-realm/protocol/openid-connect/certs
 server:
   port: 4567
 
@@ -43,3 +49,6 @@ service:
   car-service:
     name: CarStationService
     path: /api/v1/cars
+
+keycloak:
+  clientId: cab-aggregator

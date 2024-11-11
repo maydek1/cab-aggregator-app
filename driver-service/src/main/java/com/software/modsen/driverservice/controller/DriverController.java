@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.stream.Collectors;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/api/v1/drivers")
@@ -38,6 +39,7 @@ public class DriverController {
     @ApiResponse(responseCode = "201", description = "Водитель успешно создан",
             content = @Content(schema = @Schema(implementation = DriverResponse.class)))
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_DRIVER')")
     public ResponseEntity<DriverResponse> createDriver(@RequestBody DriverRequest driverRequest) {
         return new ResponseEntity<>(driverMapper.driverToDriverResponse(driverService.createDriver(driverRequest)), HttpStatus.CREATED);
     }
@@ -47,6 +49,7 @@ public class DriverController {
             content = @Content(schema = @Schema(implementation = DriverResponse.class)))
     @ApiResponse(responseCode = "404", description = "Водитель не найден")
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<DriverResponse> updateDriver(@PathVariable Long id,
                                                        @RequestBody DriverRequest driverRequest) {
         return ResponseEntity.ok(driverMapper.driverToDriverResponse(driverService.updateDriver(id, driverRequest)));
@@ -57,6 +60,7 @@ public class DriverController {
             content = @Content(schema = @Schema(implementation = DriverResponse.class)))
     @ApiResponse(responseCode = "404", description = "Водитель не найден")
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<DriverResponse> deleteDriverById(@PathVariable Long id) {
         return ResponseEntity.ok(driverMapper.driverToDriverResponse(driverService.deleteDriverById(id)));
     }
@@ -76,6 +80,7 @@ public class DriverController {
     @ApiResponse(responseCode = "200", description = "Свободный водитель найден",
             content = @Content(schema = @Schema(implementation = DriverResponse.class)))
     @GetMapping("/free")
+    @PreAuthorize("hasRole('ROLE_PASSENGER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<DriverResponse> getFreeDriver() {
         return ResponseEntity.ok(driverMapper.driverToDriverResponse(driverService.getAvailableDriver()));
     }
@@ -84,6 +89,7 @@ public class DriverController {
     @ApiResponse(responseCode = "200", description = "Рейтинг водителя обновлён",
             content = @Content(schema = @Schema(implementation = DriverResponse.class)))
     @PostMapping("/rating")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_PASSENGER')")
     public ResponseEntity<DriverResponse> updateRating(@RequestBody DriverRatingRequest driverRatingRequest) {
         return ResponseEntity.ok(driverMapper.driverToDriverResponse(driverService.updateRating(driverRatingRequest)));
     }

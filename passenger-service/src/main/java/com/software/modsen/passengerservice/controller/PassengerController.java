@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.stream.Collectors;
@@ -30,6 +31,7 @@ public class PassengerController {
             content = @Content(schema = @Schema(implementation = PassengerResponse.class)))
     @ApiResponse(responseCode = "404", description = "Пассажир не найден")
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_PASSENGER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<PassengerResponse> getPassengerById(@PathVariable Long id) {
         PassengerResponse passengerResponse = passengerMapper.passengerToPassengerResponse(passengerService.getPassengerById(id));
         return new ResponseEntity<>(passengerResponse, HttpStatus.OK);
@@ -52,6 +54,7 @@ public class PassengerController {
     @ApiResponse(responseCode = "201", description = "Пассажир успешно создан",
             content = @Content(schema = @Schema(implementation = PassengerResponse.class)))
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_PASSENGER')")
     public ResponseEntity<PassengerResponse> createPassenger(@RequestBody PassengerRequest passengerRequest) {
         PassengerResponse passengerResponse = passengerMapper.passengerToPassengerResponse(passengerService.createPassenger(passengerRequest));
         return new ResponseEntity<>(passengerResponse, HttpStatus.CREATED);
@@ -62,6 +65,7 @@ public class PassengerController {
             content = @Content(schema = @Schema(implementation = PassengerResponse.class)))
     @ApiResponse(responseCode = "404", description = "Пассажир не найден")
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<PassengerResponse> updatePassenger(
             @PathVariable Long id,
             @RequestBody PassengerRequest passengerRequest) {
@@ -73,6 +77,7 @@ public class PassengerController {
     @ApiResponse(responseCode = "204", description = "Пассажир успешно удалён")
     @ApiResponse(responseCode = "404", description = "Пассажир не найден")
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<PassengerResponse> deletePassengerById(@PathVariable Long id) {
         PassengerResponse passengerResponse = passengerMapper.passengerToPassengerResponse(passengerService.deletePassengerById(id));
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(passengerResponse);
@@ -82,8 +87,8 @@ public class PassengerController {
     @ApiResponse(responseCode = "200", description = "Счёт пассажира успешно пополнен",
             content = @Content(schema = @Schema(implementation = PassengerResponse.class)))
     @PostMapping("/money")
+    @PreAuthorize("hasRole('ROLE_PASSENGER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<PassengerResponse> chargeMoney(@RequestBody ChargeMoneyRequest chargeMoneyRequest) {
         return ResponseEntity.ok(passengerMapper.passengerToPassengerResponse(passengerService.chargeMoney(chargeMoneyRequest)));
     }
-
 }
