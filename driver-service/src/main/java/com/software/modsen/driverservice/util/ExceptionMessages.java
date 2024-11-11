@@ -8,4 +8,5 @@ public class ExceptionMessages {
     public static final String EMAIL_ALREADY_EXIST = "Driver with email '%s' already exist";
     public static final String CAR_NOT_FOUND = "Not found car with id: '%s'";
     public static final String PHONE_ALREADY_EXIST = "Driver with phone '%s' already exist";
+    public static final String COMPETITIVE_BLOCKING =  "Competitive data change. Try again";
 }
