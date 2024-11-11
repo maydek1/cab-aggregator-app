@@ -1,7 +1,6 @@
 package com.software.modsen.passengerservice.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.software.modsen.passengerservice.PassengerServiceApplication;
 import com.software.modsen.passengerservice.dto.request.PassengerRequest;
 import com.software.modsen.passengerservice.model.Passenger;
 import com.software.modsen.passengerservice.repositories.PassengerRepository;
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -18,12 +16,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(classes = PassengerServiceApplication.class)
+//@SpringBootTest(classes = PassengerServiceApplication.class)
 @AutoConfigureMockMvc
 public class PassengerIntegrationTest extends DataBaseContainerConfiguration {
 
     @Autowired
     private MockMvc mockMvc;
+
 
     @Autowired
     private PassengerRepository passengerRepository;
@@ -102,7 +101,7 @@ public class PassengerIntegrationTest extends DataBaseContainerConfiguration {
         mockMvc.perform(post("/api/v1/passengers")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(passengerRequest)))
-                .andExpect(status().isBadRequest());
+                        .andExpect(status().isBadRequest());
     }
 
     @Test

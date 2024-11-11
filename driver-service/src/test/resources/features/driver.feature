@@ -23,7 +23,7 @@ Feature: Testing DriverService
   Scenario: Update driver with existing email
     Given a driver with id 1, email "Nikita@gmail.com" and carId 11 exists
     And a driver with id 2, email "NeNikita@gmail.com" and carId 12 exists
-    When I update driver with id 1 to change email to already exist email "NeNikita@gmail.com"
+    When I update driver with id 1 to change email to already exist email "NenNikita@gmail.com"
     Then I should get an EmailAlreadyExistException
 
   Scenario: Create driver successfully

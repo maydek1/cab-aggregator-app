@@ -252,6 +252,7 @@ public class DriverSteps {
         driverRequest.setEmail(newEmail);
         when(driverRepository.findById(id)).thenReturn(Optional.of(driver));
         when(driverRepository.existsByEmail(any())).thenReturn(true);
+        when(driverMapper.driverRequestToDriver(any())).thenReturn(driver);
         try {
             driver = driverService.updateDriver(id, driverRequest);
         }
