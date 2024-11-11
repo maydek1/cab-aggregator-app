@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://my_postgres:5432/cardb
+    url: jdbc:postgresql://postgres:5432/cardb
     username: postgres
     password: 123
   jpa:

@@ -10,5 +10,5 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DriverSetResponse {
-    private Set<DriverResponse> driverResponseList;
+    private Set<DriverResponse> drivers;
 }
