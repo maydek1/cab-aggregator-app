@@ -1,15 +1,12 @@
 package com.software.modsen.passengerservice.controller;
 
+import com.software.modsen.passengerservice.controller.swagger.PassengerApi;
 import com.software.modsen.passengerservice.dto.request.ChargeMoneyRequest;
 import com.software.modsen.passengerservice.dto.request.PassengerRequest;
 import com.software.modsen.passengerservice.dto.response.PassengerResponse;
 import com.software.modsen.passengerservice.dto.response.PassengerResponseSet;
 import com.software.modsen.passengerservice.mapper.PassengerMapper;
 import com.software.modsen.passengerservice.service.PassengerService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,15 +18,12 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/v1/passengers")
 @RequiredArgsConstructor
-public class PassengerController {
+public class PassengerController implements PassengerApi {
 
     private final PassengerService passengerService;
     private final PassengerMapper passengerMapper;
 
-    @Operation(summary = "Получить пассажира по ID")
-    @ApiResponse(responseCode = "200", description = "Пассажир найден",
-            content = @Content(schema = @Schema(implementation = PassengerResponse.class)))
-    @ApiResponse(responseCode = "404", description = "Пассажир не найден")
+    @Override
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_PASSENGER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<PassengerResponse> getPassengerById(@PathVariable Long id) {
@@ -37,9 +31,7 @@ public class PassengerController {
         return new ResponseEntity<>(passengerResponse, HttpStatus.OK);
     }
 
-    @Operation(summary = "Получить всех пассажиров")
-    @ApiResponse(responseCode = "200", description = "Пассажиры успешно получены",
-            content = @Content(schema = @Schema(implementation = PassengerResponseSet.class)))
+    @Override
     @GetMapping
     public ResponseEntity<PassengerResponseSet> getAllPassengers() {
         PassengerResponseSet passengerResponseSet = new PassengerResponseSet(
@@ -50,20 +42,16 @@ public class PassengerController {
         return ResponseEntity.ok(passengerResponseSet);
     }
 
-    @Operation(summary = "Создать нового пассажира")
-    @ApiResponse(responseCode = "201", description = "Пассажир успешно создан",
-            content = @Content(schema = @Schema(implementation = PassengerResponse.class)))
+    @Override
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_PASSENGER')")
     public ResponseEntity<PassengerResponse> createPassenger(@RequestBody PassengerRequest passengerRequest) {
+        System.out.println(passengerRequest.toString());
         PassengerResponse passengerResponse = passengerMapper.passengerToPassengerResponse(passengerService.createPassenger(passengerRequest));
         return new ResponseEntity<>(passengerResponse, HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Обновить информацию о пассажире")
-    @ApiResponse(responseCode = "200", description = "Пассажир успешно обновлён",
-            content = @Content(schema = @Schema(implementation = PassengerResponse.class)))
-    @ApiResponse(responseCode = "404", description = "Пассажир не найден")
+    @Override
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<PassengerResponse> updatePassenger(
@@ -73,9 +61,7 @@ public class PassengerController {
         return new ResponseEntity<>(passengerResponse, HttpStatus.OK);
     }
 
-    @Operation(summary = "Удалить пассажира по ID")
-    @ApiResponse(responseCode = "204", description = "Пассажир успешно удалён")
-    @ApiResponse(responseCode = "404", description = "Пассажир не найден")
+    @Override
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<PassengerResponse> deletePassengerById(@PathVariable Long id) {
@@ -83,9 +69,7 @@ public class PassengerController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(passengerResponse);
     }
 
-    @Operation(summary = "Пополнить счёт пассажира")
-    @ApiResponse(responseCode = "200", description = "Счёт пассажира успешно пополнен",
-            content = @Content(schema = @Schema(implementation = PassengerResponse.class)))
+    @Override
     @PostMapping("/money")
     @PreAuthorize("hasRole('ROLE_PASSENGER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<PassengerResponse> chargeMoney(@RequestBody ChargeMoneyRequest chargeMoneyRequest) {

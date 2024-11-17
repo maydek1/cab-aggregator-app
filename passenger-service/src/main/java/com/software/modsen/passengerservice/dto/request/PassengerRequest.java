@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Getter
 @Setter
+@ToString
 public class PassengerRequest {
     private String firstName;
     private String secondName;

@@ -15,7 +15,7 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://keycloak:8080/realms/cab-realm
-          jwk-set-uri: http://localhost:8080/realms/cab-realm/protocol/openid-connect/certs
+          jwk-set-uri: http://keycloak:8080/realms/cab-realm/protocol/openid-connect/certs
 server:
   port: 4560
 
