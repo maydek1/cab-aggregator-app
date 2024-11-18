@@ -13,6 +13,12 @@ spring:
     change-log: classpath:db/changelog/db.changelog-master.yaml
   application:
     name: PassengerService
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://keycloak:8080/realms/cab-realm
+          jwk-set-uri: http://keycloak:8080/realms/cab-realm/protocol/openid-connect/certs
 server:
   port: 4566
 
@@ -31,3 +37,7 @@ management:
   endpoint:
     prometheus:
       enabled: true
+
+
+keycloak:
+  clientId: cab-aggregator

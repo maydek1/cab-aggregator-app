@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.stream.Collectors;
@@ -29,6 +30,7 @@ public class CarController {
             content = @Content(schema = @Schema(implementation = CarResponse.class)))
     @ApiResponse(responseCode = "404", description = "Машина не найдена")
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CarResponse> getCarById(@PathVariable Long id) {
         return ResponseEntity.ok(
                 carMapper.carToCarResponse(carService.getCarById(id)));
@@ -38,6 +40,7 @@ public class CarController {
     @ApiResponse(responseCode = "201", description = "Машина успешно создана",
             content = @Content(schema = @Schema(implementation = CarResponse.class)))
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CarResponse> createCar(@RequestBody CarRequest carRequest) {
         return new ResponseEntity<>(carMapper.carToCarResponse(carService.createCar(carRequest)),
                 HttpStatus.CREATED);
@@ -48,6 +51,7 @@ public class CarController {
             content = @Content(schema = @Schema(implementation = CarResponse.class)))
     @ApiResponse(responseCode = "404", description = "Машина не найдена")
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CarResponse> updateCar(@PathVariable Long id,
                                                  @RequestBody CarRequest carRequest) {
         return ResponseEntity.ok(carMapper.carToCarResponse(carService.updateCar(id, carRequest)));
@@ -58,7 +62,9 @@ public class CarController {
             content = @Content(schema = @Schema(implementation = CarResponse.class)))
     @ApiResponse(responseCode = "404", description = "Машина не найдена")
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<CarResponse> deleteCarById(@PathVariable Long id) {
+
         return ResponseEntity.ok(carMapper.carToCarResponse(carService.deleteCarById(id)));
     }
 
@@ -66,6 +72,7 @@ public class CarController {
     @ApiResponse(responseCode = "200", description = "Машины успешно получены",
             content = @Content(schema = @Schema(implementation = CarSetResponse.class)))
     @GetMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<CarSetResponse> getAllCars() {
         return ResponseEntity.ok(new CarSetResponse(carService.getAllCars().stream()
                 .map(carMapper::carToCarResponse)
