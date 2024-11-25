@@ -3,13 +3,12 @@ package com.software.modsen.driverservice.service;
 import com.software.modsen.driverservice.client.CarClient;
 import com.software.modsen.driverservice.dto.request.DriverRatingRequest;
 import com.software.modsen.driverservice.dto.request.DriverRequest;
-import com.software.modsen.driverservice.exceptions.CarNotFoundException;
-import com.software.modsen.driverservice.exceptions.DriverNotFoundException;
-import com.software.modsen.driverservice.exceptions.EmailAlreadyExistException;
-import com.software.modsen.driverservice.exceptions.PhoneAlreadyExistException;
+import com.software.modsen.driverservice.exceptions.*;
 import com.software.modsen.driverservice.mapper.DriverMapper;
 import com.software.modsen.driverservice.model.Driver;
 import com.software.modsen.driverservice.repository.DriverRepository;
+import jakarta.persistence.OptimisticLockException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -36,16 +35,21 @@ public class DriverService {
         return driver;
     }
 
+    @Transactional
     public Driver updateDriver(Long id, DriverRequest driverRequest) {
-        Driver driver = driverRepository.findById(id)
-                .orElseThrow(() -> new DriverNotFoundException(String.format(DRIVER_NOT_FOUND, id)));
+        try {
+            Driver driver = driverRepository.findById(id)
+                    .orElseThrow(() -> new DriverNotFoundException(String.format(DRIVER_NOT_FOUND, id)));
 
-        checkEmailToExist(driver.getEmail(), driverRequest.getEmail());
-        checkPhoneToExist(driver.getPhone(), driverRequest.getPhone());
+            checkEmailToExist(driver.getEmail(), driverRequest.getEmail());
+            checkPhoneToExist(driver.getPhone(), driverRequest.getPhone());
 
-        Driver driver1 = driverMapper.driverRequestToDriver(driverRequest);
-        driver1.setId(driver.getId());
-        return driverRepository.save(driver1);
+            Driver driver1 = driverMapper.driverRequestToDriver(driverRequest);
+            driver1.setId(driver.getId());
+            return driverRepository.save(driver1);
+        }catch (OptimisticLockException e) {
+            throw new CompetitiveException(COMPETITIVE_BLOCKING);
+        }
     }
 
     private void checkEmailToExist(String currentEmail, String newEmail) {

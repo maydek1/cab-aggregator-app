@@ -1,22 +1,22 @@
 package com.software.modsen.passengerservice.model;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 
-@Entity
-@Table(name = "passengers")
+
+@Document(collection = "passengers")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class Passenger {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String firstName;
     private String secondName;

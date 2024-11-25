@@ -23,4 +23,7 @@ public class Driver {
     private boolean available;
     private double rate;
     private int ratingCount;
+
+    @Version
+    private int version;
 }

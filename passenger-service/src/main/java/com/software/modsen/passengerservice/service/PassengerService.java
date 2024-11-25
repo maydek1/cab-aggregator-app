@@ -23,6 +23,7 @@ public class PassengerService {
 
     private final PassengerRepository passengerRepository;
     private final PassengerMapper passengerMapper;
+    private final SequenceGeneratorService sequenceGeneratorService;
 
     public Passenger getPassengerById(Long id) {
         return getOrElseThrow(id);
@@ -72,6 +73,7 @@ public class PassengerService {
         }
 
         Passenger passenger = passengerMapper.passengerRequestToPassenger(passengerRequest);
+        passenger.setId(sequenceGeneratorService.generateSequence(Passenger.class.getSimpleName()));
         return passengerRepository.save(passenger);
     }
 
